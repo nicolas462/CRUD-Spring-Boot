@@ -26,8 +26,8 @@ public class AppointmentController
 	}
 	
 	@PostMapping("/appointment/add")
-	public void addAppointment(@RequestBody Appointment appointment) {
-		appointmentServiceImpl.addAppointment(appointment);
+	public String addAppointment(@RequestBody Appointment appointment) {
+		return appointmentServiceImpl.addAppointment(appointment);
 	}
 	
 	@PutMapping("/appointment/update")

@@ -2,10 +2,12 @@ package com.crud.project.services.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.crud.project.entities.Doctor;
 import com.crud.project.entities.Patient;
 import com.crud.project.repositories.PatientRepository;
 import com.crud.project.services.PatientService;
@@ -32,5 +34,9 @@ public class PatientServiceImpl implements PatientService
 	
 	public void deletePatient(int id) {
 		patientRepository.deleteById(id);
+	}
+	
+	public Optional<Patient> findPatientById(int id) {
+		return patientRepository.findById(id);
 	}
 }

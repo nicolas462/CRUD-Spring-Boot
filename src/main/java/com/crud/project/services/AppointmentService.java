@@ -10,9 +10,9 @@ public interface AppointmentService
 {
 	public List <Appointment> getAppointments();
 	
-	public void addAppointment(Appointment appointment);
+	public String addAppointment(Appointment appointment);
 	
-	public void updateAppointment(Appointment appointment);
+	public String updateAppointment(Appointment appointment);
 	
 	public void deleteAppointment(int id);
 }

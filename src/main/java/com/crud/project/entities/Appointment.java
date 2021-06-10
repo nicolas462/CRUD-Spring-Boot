@@ -20,7 +20,8 @@ import lombok.Setter;
 //@Data
 public class Appointment {
 	
-	@Id @GeneratedValue(strategy=GenerationType.SEQUENCE)
+	@Id @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="APPOINTMENT_SEQ")
+	@SequenceGenerator (name = "APPOINTMENT_SEQ", sequenceName="APPOINTMENT_SEQ", allocationSize=1)
 	@Column(name = "ID")
     private int id;
 	@Column(name = "ID_PATIENT")

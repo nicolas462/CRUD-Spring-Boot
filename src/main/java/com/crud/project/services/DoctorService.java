@@ -1,6 +1,7 @@
 package com.crud.project.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -16,4 +17,6 @@ public interface DoctorService
 	public void updateDoctor(Doctor doctor);
 	
 	public void deleteDoctor(int id);
+	
+	public Optional<Doctor> findDoctorById(int id);
 }
