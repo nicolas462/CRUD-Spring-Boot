@@ -27,9 +27,9 @@ public class AppointmentServiceImpl implements AppointmentService {
 	PatientServiceImpl patientServiceImpl;
 
 	public List<Appointment> getAppointments() {
-		List<Appointment> listAppointmentsAppointments = new ArrayList<Appointment>();
-		appointmentRepository.findAll().forEach(listAppointmentsAppointments::add);
-		return listAppointmentsAppointments;
+		List<Appointment> listAppointments = new ArrayList<Appointment>();
+		appointmentRepository.findAll().forEach(listAppointments::add);
+		return listAppointments;
 	}
 
 	public String addAppointment(Appointment appointment) {
@@ -42,7 +42,10 @@ public class AppointmentServiceImpl implements AppointmentService {
 		// check if patient exist
 		if (patientOpt.isEmpty())
 			return "Patient not found. Try again.";
-
+		// check if the patient is already registered with the same doctor in the same day
+		if (isSamePatientSameDaySameDoctor(appointment))
+			return "Patient already registered with the Doctor in the desired date. Try again.";
+				
 		Doctor doctorObj = doctorOpt.get();
 		
 		try {
@@ -100,8 +103,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 		if (!onRange) // if desiredSchedule is not on range
 			return onRange;
 		
-		AppointmentServiceImpl appointmentAux = new AppointmentServiceImpl();
-		List <Appointment> listAppointments = appointmentAux.getAppointments();
+		List<Appointment> listAppointments = getAppointments();
 		
 		desiredDateParseDate = simpleDateFormat.parse(desiredDate);
 		
@@ -120,5 +122,12 @@ public class AppointmentServiceImpl implements AppointmentService {
 			}
 		}
 		return true;
+	}
+	
+	public boolean isSamePatientSameDaySameDoctor(Appointment appointment) {
+		int idPatient = appointment.getIdPatient();
+		int idDoctor = appointment.getIdDoctor();
+		String date = appointment.getAssignedDate();
+		return appointmentRepository.existsByIdPatientAndIdDoctorAndAssignedDate(idPatient, idDoctor, date);
 	}
 }

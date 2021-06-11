@@ -8,4 +8,5 @@ import com.crud.project.entities.Appointment;
 @Repository
 public interface AppointmentRepository extends CrudRepository<Appointment, Integer> {
 
+	boolean existsByIdPatientAndIdDoctorAndAssignedDate(int idPatient, int idDoctor, String date);
 }

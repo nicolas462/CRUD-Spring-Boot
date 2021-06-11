@@ -7,7 +7,6 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.crud.project.entities.Doctor;
 import com.crud.project.entities.Patient;
 import com.crud.project.repositories.PatientRepository;
 import com.crud.project.services.PatientService;
