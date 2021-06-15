@@ -19,22 +19,34 @@ import com.crud.project.services.AppointmentService;
 
 @Service
 public class AppointmentServiceImpl implements AppointmentService {
+	
 	@Autowired
 	AppointmentRepository appointmentRepository;
 	@Autowired
 	DoctorServiceImpl doctorServiceImpl;
 	@Autowired
 	PatientServiceImpl patientServiceImpl;
-
+	
+	/**
+	 * Get all records in the database of the appointment table.
+	 * @return = All rows registered.
+	 */
 	public List<Appointment> getAppointments() {
 		List<Appointment> listAppointments = new ArrayList<Appointment>();
 		appointmentRepository.findAll().forEach(listAppointments::add);
 		return listAppointments;
 	}
-
+	
+	/**
+	 * Add a new appointment row to the appointment table of the database.
+	 * It needs to check if the patient and doctor exists and if the appointment
+	 * has the necessary requirements (isSamePatientSameDaySameDoctor).
+	 * @param appointment = Appointment object with all the parameters of appointment entity.
+	 * @return = String message with the transaction result.
+	 */
 	public String addAppointment(Appointment appointment) {
-		Optional <Doctor> doctorOpt = doctorServiceImpl.findDoctorById(appointment.getIdDoctor());
-		Optional <Patient> patientOpt = patientServiceImpl.findPatientById(appointment.getIdPatient());
+		Optional<Doctor> doctorOpt = doctorServiceImpl.findDoctorById(appointment.getIdDoctor());
+		Optional<Patient> patientOpt = patientServiceImpl.findPatientById(appointment.getIdPatient());
 			
 		// check if doctor exists
 		if (doctorOpt.isEmpty())
@@ -59,21 +71,30 @@ public class AppointmentServiceImpl implements AppointmentService {
 		return "Executed correctly.";
 	}
 
-	public String updateAppointment(Appointment appointment) {
+	/**
+	 * Update an appointment entity present in the database.
+	 * @param appointment = Appointment entity containing all the information about a patient,
+	 * a doctor and the date. 
+	 */
+	public void updateAppointment(Appointment appointment) {
 		appointmentRepository.save(appointment);
-		return "";
 	}
-
+	/**
+	 * 
+	 */
 	public void deleteAppointment(int id) {
 		appointmentRepository.deleteById(id);
 	}
 	
 	/**
-	 * Check if desiredHour and desiredDate are not in the same hour of the stored 
-	 * @param appointment = Appointment object.
-	 * @param initSchDoctor = initial schedule's doctor.
-	 * @param endSchDoctor = end schedule's doctor.
-	 * @return = true if it's avalaible.
+	 * Check if desiredHour and desiredDate are between the work schedule's doctor and if
+	 * the desiredHour has one hour of difference across all the hours stored in the appointment
+	 * entity.  
+	 * @param appointment = Appointment object that represent the data of an appointment between a doctor
+	 * and a patient.
+	 * @param initSchDoctor = initial work schedule's doctor.
+	 * @param endSchDoctor = end work schedule's doctor.
+	 * @return = true if desiredHour can be stored.
 	 * @throws ParseException = Handle parse Strings to Date.
 	 */
 	public boolean isAvailable(Appointment appointment, String initSchDoctor, String endSchDoctor) 
@@ -124,6 +145,13 @@ public class AppointmentServiceImpl implements AppointmentService {
 		return true;
 	}
 	
+	/**
+	 * Check if it exists a record with the same patient, same doctor
+	 * in the same day.
+	 * @param appointment = appointment = Appointment object that represent the data of an appointment between a doctor
+	 * and a patient. 
+	 * @return = true if a record was found.
+	 */
 	public boolean isSamePatientSameDaySameDoctor(Appointment appointment) {
 		int idPatient = appointment.getIdPatient();
 		int idDoctor = appointment.getIdDoctor();

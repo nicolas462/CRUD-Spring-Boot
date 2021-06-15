@@ -17,7 +17,7 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "APPOINTMENT")
-//@Data
+@Data
 public class Appointment {
 	
 	@Id @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="APPOINTMENT_SEQ")

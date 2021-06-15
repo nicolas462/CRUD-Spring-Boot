@@ -15,26 +15,43 @@ import com.crud.project.entities.Appointment;
 import com.crud.project.services.impl.AppointmentServiceImpl;
 
 @RestController
-public class AppointmentController
-{
+public class AppointmentController {
+	
 	@Autowired
 	AppointmentServiceImpl appointmentServiceImpl;
 	
+	/**
+	 * List all records in the database of the appointment table.
+	 * @return = JSON of all data.
+	 */
 	@GetMapping("/appointment/list")
-	public List <Appointment> getAppointments() {
+	public List<Appointment> getAppointments() {
 		return appointmentServiceImpl.getAppointments();
 	}
 	
+	/**
+	 * Add a new appointment row to the appointment table of the database.
+	 * @param appointment = JSON with all the parameters of appointment entity.
+	 * @return = String message with the transaction result.
+	 */
 	@PostMapping("/appointment/add")
 	public String addAppointment(@RequestBody Appointment appointment) {
 		return appointmentServiceImpl.addAppointment(appointment);
 	}
 	
+	/**
+	 * Update an appointment entity present in the database.
+	 * @param appointment = JSON with all the parameters of appointment entity. 
+	 */
 	@PutMapping("/appointment/update")
 	public void updateAppointment(@RequestBody Appointment appointment) {
 		appointmentServiceImpl.updateAppointment(appointment);
 	}
 	
+	/**
+	 * Delete a record from appointment table in the database.
+	 * @param id = identifier column of the register.
+	 */
 	@DeleteMapping("/appointment/delete/{id}")
 	public void deleteAppointment(@PathVariable int id) {
 		appointmentServiceImpl.deleteAppointment(id);
