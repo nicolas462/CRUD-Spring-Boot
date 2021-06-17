@@ -22,7 +22,7 @@ public class PatientServiceImpl implements PatientService {
 	 * @return = All rows registered.
 	 */
 	public List <Patient> getPatients() {
-		List <Patient> listPatients = new ArrayList<Patient>();
+		List <Patient> listPatients = new ArrayList<>();
 		patientRepository.findAll().forEach(listPatients :: add);
 		return listPatients;
 	}

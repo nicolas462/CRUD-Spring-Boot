@@ -1,32 +1,42 @@
-package com.crud.project.entities;
+package com.crud.project.dto;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
+import java.io.Serializable;
 
-@Entity
-@Table(name = "APPOINTMENT")
-public class Appointment {
-	
-	@Id @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="APPOINTMENT_SEQ")
-	@SequenceGenerator (name = "APPOINTMENT_SEQ", sequenceName="APPOINTMENT_SEQ", allocationSize=1)
-	@Column(name = "ID")
+import com.crud.project.entities.Appointment;
+
+public class AppointmentDTO implements Serializable {
+
+	/**
+	 * SerialVersion
+	 */
+	private static final long serialVersionUID = 3L;
+
     private int id;
-	@Column(name = "ID_PATIENT")
     private int idPatient;
-	@Column(name = "ID_DOCTOR")
 	private int idDoctor;
-	@Column(name = "CREATION_DATE")
 	private String creationDate;
-	@Column(name = "ASSIGNED_DATE")
 	private String assignedDate;
-	@Column(name = "ASSIGNED_SCH")
 	private String assignedSchedule;
 	
+	public AppointmentDTO(Appointment appointment) {
+		super();
+		this.id = appointment.getId();
+		this.idPatient = appointment.getIdPatient();
+		this.idDoctor = appointment.getIdDoctor();
+		this.creationDate = appointment.getCreationDate();
+		this.assignedDate = appointment.getAssignedDate();
+		this.assignedSchedule = appointment.getAssignedSchedule();
+	}	
+	public AppointmentDTO(int id, int idPatient, int idDoctor, String creationDate, String assignedDate,
+			String assignedSchedule) {
+		super();
+		this.id = id;
+		this.idPatient = idPatient;
+		this.idDoctor = idDoctor;
+		this.creationDate = creationDate;
+		this.assignedDate = assignedDate;
+		this.assignedSchedule = assignedSchedule;
+	}
 	public int getId() {
 		return id;
 	}

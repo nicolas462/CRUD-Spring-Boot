@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.crud.project.converters.PatientConverter;
+import com.crud.project.dto.PatientDTO;
 import com.crud.project.entities.Patient;
 import com.crud.project.services.impl.PatientServiceImpl;
 
@@ -19,14 +21,17 @@ public class PatientController {
 	
 	@Autowired
 	PatientServiceImpl patientServiceImpl;
+	@Autowired
+	PatientConverter patientConverter;
 	
 	/**
 	 * List all records in the database of the patient table.
 	 * @return = JSON of all data.
 	 */
 	@GetMapping("/patient/list")
-	public List<Patient> getPatients() {
-		return patientServiceImpl.getPatients();
+	public List<PatientDTO> getPatients() {
+		List<Patient> findAll = patientServiceImpl.getPatients();
+		return patientConverter.entityToDto(findAll);
 	}
 	
 	/**
@@ -34,7 +39,8 @@ public class PatientController {
 	 * @param patient = JSON with all the parameters of patient entity.
 	 */
 	@PostMapping("/patient/add")
-	public void addPatient(@RequestBody Patient patient) {
+	public void addPatient(@RequestBody PatientDTO patientDto) {
+		var patient = patientConverter.dtoToEntity(patientDto);
 		patientServiceImpl.addPatient(patient);
 	}
 	
@@ -43,7 +49,8 @@ public class PatientController {
 	 * @param patient = JSON with all the parameters of patient entity. 
 	 */
 	@PutMapping("/patient/update")
-	public void updatePatient(@RequestBody Patient patient) {
+	public void updatePatient(@RequestBody PatientDTO patientDto) {
+		var patient = patientConverter.dtoToEntity(patientDto);
 		patientServiceImpl.updatePatient(patient);
 	}
 	

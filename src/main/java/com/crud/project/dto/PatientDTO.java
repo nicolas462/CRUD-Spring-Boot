@@ -1,36 +1,46 @@
-package com.crud.project.entities;
+package com.crud.project.dto;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
+import java.io.Serializable;
 
-@Entity
-@Table(name = "PATIENT")
-//@Data
-public class Patient {
+import com.crud.project.entities.Patient;
+
+public class PatientDTO implements Serializable {
+
+	/**
+	 * SerialVersion
+	 */
+	private static final long serialVersionUID = 2L;
 	
-	@Id @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="PATIENT_SEQ")
-	@SequenceGenerator (name = "PATIENT_SEQ", sequenceName="PATIENT_SEQ", allocationSize=1)
-	@Column(name = "ID")
 	private int id;
-	@Column(name = "NAME")
 	private String name;
-	@Column(name = "IDENTIFICATION")
 	private String identification;
-    @Column(name = "ID_TYPE")
     private String idType;
-    @Column(name = "BIRTH_DATE")
     private String birthDate;
-    @Column(name = "HEALTH_ENTITY")
     private String healthEntity;
-    @Column(name = "CLINIC_HISTORY")
     private String clinicHistory;
-	
-    public int getId() {
+
+    public PatientDTO(Patient patient) {
+		super();
+		this.id = patient.getId();
+		this.name = patient.getName();
+		this.identification = patient.getIdentification();
+		this.idType = patient.getIdType();
+		this.birthDate = patient.getBirthDate();
+		this.healthEntity = patient.getHealthEntity();
+		this.clinicHistory = patient.getClinicHistory();
+	}
+    public PatientDTO(int id, String name, String identification, String idType, String birthDate, String healthEntity,
+			String clinicHistory) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.identification = identification;
+		this.idType = idType;
+		this.birthDate = birthDate;
+		this.healthEntity = healthEntity;
+		this.clinicHistory = clinicHistory;
+	}
+	public int getId() {
 		return id;
 	}
 	public void setId(int id) {
@@ -72,5 +82,4 @@ public class Patient {
 	public void setClinicHistory(String clinicHistory) {
 		this.clinicHistory = clinicHistory;
 	}
-
 }

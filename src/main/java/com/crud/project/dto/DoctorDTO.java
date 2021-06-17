@@ -1,40 +1,52 @@
-package com.crud.project.entities;
+package com.crud.project.dto;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
+import java.io.Serializable;
 
-@Entity
-@Table(name = "DOCTOR")
-//@Data
-public class Doctor {
+import com.crud.project.entities.Doctor;
+
+public class DoctorDTO implements Serializable {
+
+	/**
+	 * SerialVersion
+	 */
+	private static final long serialVersionUID = 1L;
 	
-	@Id @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="DOCTOR_SEQ")
-	@SequenceGenerator (name = "DOCTOR_SEQ", sequenceName="DOCTOR_SEQ", allocationSize=1)
-	@Column(name = "ID")
 	private int id;
-	@Column(name = "NAME")
 	private String name;
-	@Column(name = "IDENTIFICATION")
 	private String identification;
-    @Column(name = "ID_TYPE")
     private String idType;
-    @Column(name = "PROFESIONAL_CARD_NUMBER")
     private String profesionalCardNumber;
-    @Column(name = "YEAR_EXP")
     private double yearsExp;
-    @Column(name = "SPECIALITY")
     private String speciality;
-    @Column(name = "INIT_SCH")
     private String initSch;
-    @Column(name = "END_SCH")
     private String endSch;
-	
-    public int getId() {
+    
+    public DoctorDTO(Doctor doctor) {
+		super();
+		this.id = doctor.getId();
+		this.name = doctor.getName();
+		this.identification = doctor.getIdentification();
+		this.idType = doctor.getIdType();
+		this.profesionalCardNumber = doctor.getProfesionalCardNumber();
+		this.yearsExp = doctor.getYearsExp();
+		this.speciality = doctor.getSpeciality();
+		this.initSch = doctor.getInitSch();
+		this.endSch = doctor.getEndSch();
+	}
+	public DoctorDTO(int id, String name, String identification, String idType, String profesionalCardNumber,
+			double yearsExp, String speciality, String initSch, String endSch) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.identification = identification;
+		this.idType = idType;
+		this.profesionalCardNumber = profesionalCardNumber;
+		this.yearsExp = yearsExp;
+		this.speciality = speciality;
+		this.initSch = initSch;
+		this.endSch = endSch;
+	}
+	public int getId() {
 		return id;
 	}
 	public void setId(int id) {
@@ -87,5 +99,8 @@ public class Doctor {
 	}
 	public void setEndSch(String endSch) {
 		this.endSch = endSch;
+	}
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 }

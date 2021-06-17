@@ -4,7 +4,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import static java.lang.Math.abs;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,7 +31,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 	 * @return = All rows registered.
 	 */
 	public List<Appointment> getAppointments() {
-		List<Appointment> listAppointments = new ArrayList<Appointment>();
+		List<Appointment> listAppointments = new ArrayList<>();
 		appointmentRepository.findAll().forEach(listAppointments::add);
 		return listAppointments;
 	}
@@ -58,13 +57,12 @@ public class AppointmentServiceImpl implements AppointmentService {
 		if (isSamePatientSameDaySameDoctor(appointment))
 			return "Patient already registered with the Doctor in the desired date. Try again.";
 				
-		Doctor doctorObj = doctorOpt.get();
+		var doctorObj = doctorOpt.get();
 		
 		try {
 			if(!isAvailable(appointment, doctorObj.getInitSch(), doctorObj.getEndSch()))
 				return "Schedule not available. Try with another hour.";
 		} catch (ParseException e) {
-			e.printStackTrace();
 			return "Something went wrong. Try again.";
 		}
 		appointmentRepository.save(appointment);
@@ -99,21 +97,20 @@ public class AppointmentServiceImpl implements AppointmentService {
 	 */
 	public boolean isAvailable(Appointment appointment, String initSchDoctor, String endSchDoctor) 
 			throws ParseException {		
-		String pattern = "yyyy-MM-dd";
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-		Date desiredDateParseDate = new Date();
+		var pattern = "yyyy-MM-dd";
+		var simpleDateFormat = new SimpleDateFormat(pattern);
 		
 		String desiredSchedule = appointment.getAssignedSchedule();
 		String desiredDate = appointment.getAssignedDate();
 		//convert desired dates to int to operate
-		int desiredScheduleInt = Integer
+		var desiredScheduleInt = Integer
 				.parseInt(desiredSchedule.split(":")[0] + desiredSchedule.split(":")[1]);
-		int initSchDoctorInt = Integer
+		var initSchDoctorInt = Integer
 				.parseInt(initSchDoctor.split(":")[0] + initSchDoctor.split(":")[1]);
-		int endSchDoctorInt = Integer
+		var endSchDoctorInt = Integer
 				.parseInt(endSchDoctor.split(":")[0] + endSchDoctor.split(":")[1]);
 
-		boolean onRange = false; // it will define if the desired hour is between the schedule's doctor.
+		var onRange = false; // it will define if the desired hour is between the schedule's doctor.
 
 		// if schedule's doctor starts at night
 		if (initSchDoctorInt > endSchDoctorInt)
@@ -126,23 +123,32 @@ public class AppointmentServiceImpl implements AppointmentService {
 		
 		List<Appointment> listAppointments = getAppointments();
 		
-		desiredDateParseDate = simpleDateFormat.parse(desiredDate);
+		var desiredDateParseDate = simpleDateFormat.parse(desiredDate);
 		
 		for (Appointment candidateAppointment : listAppointments) {
-			int candidateAssignSchInt = Integer
-					.parseInt(candidateAppointment.getAssignedSchedule().split(":")[0] + candidateAppointment.getAssignedSchedule().split(":")[1]);
+			var candidateAssignSchInt = Integer
+					.parseInt(candidateAppointment.getAssignedSchedule().split(":")[0] 
+							+ candidateAppointment.getAssignedSchedule().split(":")[1]);
 
 			String candidateSchDate = candidateAppointment.getAssignedDate();
 
-			Date candidateAssignDate = new Date();
-			candidateAssignDate = simpleDateFormat.parse(candidateSchDate);
+			var candidateAssignDate = simpleDateFormat.parse(candidateSchDate);
 			// if they're the same day
-			if (candidateAssignDate.compareTo(desiredDateParseDate) == 0) {
-				if (abs(candidateAssignSchInt - desiredScheduleInt) < 100) // less than one hour
+			if (candidateAssignDate.compareTo(desiredDateParseDate) == 0 
+					&& isLessThanAnHour(candidateAssignSchInt, desiredScheduleInt)) 
 					return false;
-			}
 		}
 		return true;
+	}
+	
+	/**
+	 * Check if the parameters have less than a hundred of difference (one hour).
+	 * @param assignedSchedule = Schedule of the appointment stored. 
+	 * @param desiredSchedule = Desired schedule of the appointment to evaluate. 
+	 * @return = true if there's a less than 100 of difference.
+	 */
+	public boolean isLessThanAnHour(int assignedSchedule, int desiredSchedule) {
+		return (abs(assignedSchedule - desiredSchedule) < 100);
 	}
 	
 	/**
@@ -153,8 +159,8 @@ public class AppointmentServiceImpl implements AppointmentService {
 	 * @return = true if a record was found.
 	 */
 	public boolean isSamePatientSameDaySameDoctor(Appointment appointment) {
-		int idPatient = appointment.getIdPatient();
-		int idDoctor = appointment.getIdDoctor();
+		var idPatient = appointment.getIdPatient();
+		var idDoctor = appointment.getIdDoctor();
 		String date = appointment.getAssignedDate();
 		return appointmentRepository.existsByIdPatientAndIdDoctorAndAssignedDate(idPatient, idDoctor, date);
 	}

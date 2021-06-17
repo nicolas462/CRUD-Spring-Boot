@@ -22,14 +22,14 @@ public class DoctorServiceImpl implements DoctorService {
 	 * @return = All rows registered.
 	 */
 	public List<Doctor> getDoctors() {
-		List<Doctor> listDoctors = new ArrayList<Doctor>();
+		List<Doctor> listDoctors = new ArrayList<>();
 		doctorRepository.findAll().forEach(listDoctors :: add);
 		return listDoctors;
 	}
 	
 	/**
 	 * Add a new doctor row to the doctor table of the database.
-	 * @param doctor = Doctor object with all the parameters of doctor entity.
+	 * @param doctorDto = Doctor object with all the parameters of doctor entity.
 	 * @return = String message with the transaction result.
 	 */
 	public void addDoctor(Doctor doctor) {

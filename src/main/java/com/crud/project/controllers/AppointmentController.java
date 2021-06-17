@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.crud.project.converters.AppointmentConverter;
+import com.crud.project.dto.AppointmentDTO;
 import com.crud.project.entities.Appointment;
 import com.crud.project.services.impl.AppointmentServiceImpl;
 
@@ -19,14 +21,17 @@ public class AppointmentController {
 	
 	@Autowired
 	AppointmentServiceImpl appointmentServiceImpl;
+	@Autowired
+	AppointmentConverter appointmentConverter;
 	
 	/**
 	 * List all records in the database of the appointment table.
 	 * @return = JSON of all data.
 	 */
 	@GetMapping("/appointment/list")
-	public List<Appointment> getAppointments() {
-		return appointmentServiceImpl.getAppointments();
+	public List<AppointmentDTO> getAppointments() {
+		List<Appointment> findAll = appointmentServiceImpl.getAppointments(); 
+		return appointmentConverter.entityToDto(findAll);
 	}
 	
 	/**
@@ -35,7 +40,8 @@ public class AppointmentController {
 	 * @return = String message with the transaction result.
 	 */
 	@PostMapping("/appointment/add")
-	public String addAppointment(@RequestBody Appointment appointment) {
+	public String addAppointment(@RequestBody AppointmentDTO appointmentDto) {
+		var appointment = appointmentConverter.dtoToEntity(appointmentDto);
 		return appointmentServiceImpl.addAppointment(appointment);
 	}
 	
@@ -44,7 +50,8 @@ public class AppointmentController {
 	 * @param appointment = JSON with all the parameters of appointment entity. 
 	 */
 	@PutMapping("/appointment/update")
-	public void updateAppointment(@RequestBody Appointment appointment) {
+	public void updateAppointment(@RequestBody AppointmentDTO appointmentDto) {
+		var appointment = appointmentConverter.dtoToEntity(appointmentDto);
 		appointmentServiceImpl.updateAppointment(appointment);
 	}
 	
